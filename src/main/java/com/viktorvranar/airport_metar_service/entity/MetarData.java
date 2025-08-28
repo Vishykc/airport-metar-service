@@ -24,6 +24,7 @@ public class MetarData {
     @Column(name = "raw_data", length = 1000)
     private String rawData;
 
+    /* TODO will be used for extra tasks
     @Column(name = "observation_time")
     private LocalDateTime observationTime;
 
@@ -35,7 +36,7 @@ public class MetarData {
     
     @Column(name = "visibility")
     private Integer visibility;
-
+*/
     public MetarData() {}
     
     public Long getId() {
@@ -62,7 +63,7 @@ public class MetarData {
         this.rawData = rawData;
     }
     
-    public LocalDateTime getObservationTime() {
+    /* public LocalDateTime getObservationTime() {
         return observationTime;
     }
     
@@ -93,4 +94,5 @@ public class MetarData {
     public void setVisibility(Integer visibility) {
         this.visibility = visibility;
     }
+        */
 }

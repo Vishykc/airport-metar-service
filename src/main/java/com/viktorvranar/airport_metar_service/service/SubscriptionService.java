@@ -24,9 +24,10 @@ public class SubscriptionService {
         return subscriptionRepository.findAll();
     }
 
+    /* TODO this is for extra tasks
     public List<Subscription> getActiveSubscriptions() {
         return subscriptionRepository.findByActiveTrue();
-    }
+    } */
     
     public Optional<Subscription> getSubscriptionByIcaoCode(String icaoCode) {
         return subscriptionRepository.findByIcaoCode(icaoCode);
@@ -36,6 +37,7 @@ public class SubscriptionService {
         return subscriptionRepository.existsByIcaoCode(icaoCode);
     }
 
+    /* TODO for extra tasks
     public Subscription updateSubscriptionStatus(String icaoCode, boolean active) {
         Optional<Subscription> subscriptionOpt = subscriptionRepository.findByIcaoCode(icaoCode);
         if (subscriptionOpt.isPresent()) {
@@ -44,12 +46,37 @@ public class SubscriptionService {
             return subscriptionRepository.save(subscription);
         }
         return null;
-    }
+    } */
 
     public void deleteSubscription(String icaoCode) {
         Optional<Subscription> subscriptionOpt = subscriptionRepository.findByIcaoCode(icaoCode);
         if (subscriptionOpt.isPresent()) {
             subscriptionRepository.delete(subscriptionOpt.get());
+        }
+    }
+
+    // DTO classes for request bodies
+    public static class SubscriptionRequest {
+        private String icaoCode;
+        
+        public String getIcaoCode() {
+            return icaoCode;
+        }
+        
+        public void setIcaoCode(String icaoCode) {
+            this.icaoCode = icaoCode;
+        }
+    }
+    
+    public static class SubscriptionStatusRequest {
+        private String active;
+        
+        public String getActive() {
+            return active;
+        }
+        
+        public void setActive(String active) {
+            this.active = active;
         }
     }
     

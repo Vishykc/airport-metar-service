@@ -22,7 +22,8 @@ public class MetarService {
         MetarData metarData = new MetarData();
         metarData.setIcaoCode(icaoCode);
         metarData.setRawData(rawData);
-        metarData.setObservationTime(LocalDateTime.now());
+        /* TODO for extra tasks
+        metarData.setObservationTime(LocalDateTime.now()); */
         
         /* TODO for EKSTRA TASKS Parse METAR data for specific fields
         parseMetarData(metarData, rawData); */

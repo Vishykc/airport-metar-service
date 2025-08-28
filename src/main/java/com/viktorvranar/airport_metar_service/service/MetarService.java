@@ -32,7 +32,7 @@ public class MetarService {
     }
     
     public Optional<MetarData> getLatestMetarData(String icaoCode) {
-        return metarDataRepository.findFirstByIcaoCodeOrderByObservationTimeDesc(icaoCode);
+        return metarDataRepository.findFirstByIcaoCodeOrderByIdDesc(icaoCode);
     }
     
     public List<MetarData> getMetarDataHistory(String icaoCode) {

@@ -1,0 +1,160 @@
+{
+	"info": {
+		"_postman_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+		"name": "Airport METAR Service",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"description": "API collection for testing the Airport METAR Service"
+	},
+	"item": [
+		{
+			"name": "Subscriptions",
+			"item": [
+				{
+					"name": "Subscribe to Airport",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"icaoCode\": \"LDZA\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/subscriptions",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"subscriptions"
+							]
+						},
+						"description": "Subscribe to an airport by ICAO code"
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Subscriptions",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/subscriptions",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"subscriptions"
+							]
+						},
+						"description": "Get all airport subscriptions"
+					},
+					"response": []
+				},
+				{
+					"name": "Unsubscribe from Airport",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/subscriptions/LDZA",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"subscriptions",
+								"LDZA"
+							]
+						},
+						"description": "Unsubscribe from an airport by ICAO code"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "METAR Data",
+			"item": [
+				{
+					"name": "Store METAR Data",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"data\": \"METAR LDZA 301200Z 12008KT 9999 FEW040 25/18 Q1013 NOSIG\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/airport/LDZA/METAR",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"airport",
+								"LDZA",
+								"METAR"
+							]
+						},
+						"description": "Store METAR data for an airport"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Latest METAR Data",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/airport/LDZA/METAR",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"airport",
+								"LDZA",
+								"METAR"
+							]
+						},
+						"description": "Get the latest METAR data for an airport"
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8080",
+			"type": "string"
+		}
+	]
+}

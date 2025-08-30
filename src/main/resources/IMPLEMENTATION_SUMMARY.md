@@ -82,6 +82,8 @@ The following extra tasks have been identified but not implemented as per requir
 1. `src/main/resources/fetch_metar_data.sh` - Automated task script
 2. `src/main/resources/SCRIPT_README.md` - Documentation for the script
 3. `src/main/resources/sql_script_for_creating_database_and_user.sql` - Database setup script
+4. `src/main/resources/DATABASE_SETUP.md` - Detailed database setup instructions
+5. `src/main/resources/AirportMETARService.postman_collection.json` - Postman collection for API testing
 
 ## 7. Testing
 

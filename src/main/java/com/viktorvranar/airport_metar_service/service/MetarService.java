@@ -77,12 +77,12 @@ public class MetarService {
      * @param icaoCode the ICAO code of the airport
      * @return a list of MetarData entities
      */
-    public List<MetarData> getMetarDataHistory(String icaoCode) {
+    /* public List<MetarData> getMetarDataHistory(String icaoCode) {
         logger.debug("Retrieving METAR data history for airport: {}", icaoCode);
         List<MetarData> metarDataList = metarDataRepository.findByIcaoCode(icaoCode);
         logger.debug("Found {} METAR data entries for airport: {}", metarDataList.size(), icaoCode);
         return metarDataList;
-    }
+    } */
 }
     
         /* TODO for EKSTRA TASKS Parse METAR data for specific fields

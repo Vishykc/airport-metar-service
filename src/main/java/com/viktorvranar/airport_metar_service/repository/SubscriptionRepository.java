@@ -29,7 +29,7 @@ public interface SubscriptionRepository extends JpaRepository<Subscription, Long
      *
      * @return a list of active Subscription entities
      */
-    List<Subscription> findByActiveTrue();
+    /* List<Subscription> findByActiveTrue(); */
 
     /**
      * Find subscriptions by active status.
@@ -37,8 +37,8 @@ public interface SubscriptionRepository extends JpaRepository<Subscription, Long
      * @param active the active status to filter by
      * @return a list of Subscription entities with the specified active status
      */
-    @Query("SELECT s FROM Subscription s WHERE s.active = ?1")
-    List<Subscription> findByActiveStatus(boolean active);
+    /* @Query("SELECT s FROM Subscription s WHERE s.active = ?1")
+    List<Subscription> findByActiveStatus(boolean active); */
 
     /**
      * Check if a subscription exists for an ICAO code.

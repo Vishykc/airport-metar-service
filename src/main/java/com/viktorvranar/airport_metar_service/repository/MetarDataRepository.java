@@ -39,5 +39,5 @@ public interface MetarDataRepository extends JpaRepository<MetarData, Long> {
      */
     // Modified to order by ID instead of observationTime
     @Query("SELECT m FROM MetarData m WHERE m.icaoCode = ?1 ORDER BY m.id DESC")
-    List<MetarData> findLatestByIcaoCode(String icaoCode);
+    MetarData findLatestByIcaoCode(String icaoCode);
 }

@@ -6,19 +6,28 @@ import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.viktorvranar.airport_metar_service.entity.MetarData;
+import com.viktorvranar.airport_metar_service.exception.MetarDataNotFoundException;
 import com.viktorvranar.airport_metar_service.repository.MetarDataRepository;
     
 @Service
 public class MetarService {
     
-    @Autowired
-    private MetarDataRepository metarDataRepository;
+    private static final Logger logger = LoggerFactory.getLogger(MetarService.class);
+    
+    private final MetarDataRepository metarDataRepository;
+    
+    public MetarService(MetarDataRepository metarDataRepository) {
+        this.metarDataRepository = metarDataRepository;
+    }
     
     public MetarData saveMetarData(String icaoCode, String rawData) {
+        logger.debug("Saving METAR data for airport: {}", icaoCode);
         MetarData metarData = new MetarData();
         metarData.setIcaoCode(icaoCode);
         metarData.setRawData(rawData);
@@ -28,15 +37,28 @@ public class MetarService {
         /* TODO for EKSTRA TASKS Parse METAR data for specific fields
         parseMetarData(metarData, rawData); */
         
-        return metarDataRepository.save(metarData);
+        MetarData savedData = metarDataRepository.save(metarData);
+        logger.debug("Successfully saved METAR data for airport: {} with ID: {}", icaoCode, savedData.getId());
+        return savedData;
     }
     
-    public Optional<MetarData> getLatestMetarData(String icaoCode) {
-        return metarDataRepository.findFirstByIcaoCodeOrderByIdDesc(icaoCode);
+    public MetarData getLatestMetarData(String icaoCode) {
+        logger.debug("Retrieving latest METAR data for airport: {}", icaoCode);
+        Optional<MetarData> metarData = metarDataRepository.findFirstByIcaoCodeOrderByIdDesc(icaoCode);
+        if (metarData.isPresent()) {
+            logger.debug("Found latest METAR data for airport: {} with ID: {}", icaoCode, metarData.get().getId());
+            return metarData.get();
+        } else {
+            logger.debug("No METAR data found for airport: {}", icaoCode);
+            throw new MetarDataNotFoundException(icaoCode);
+        }
     }
     
     public List<MetarData> getMetarDataHistory(String icaoCode) {
-        return metarDataRepository.findByIcaoCode(icaoCode);
+        logger.debug("Retrieving METAR data history for airport: {}", icaoCode);
+        List<MetarData> metarDataList = metarDataRepository.findByIcaoCode(icaoCode);
+        logger.debug("Found {} METAR data entries for airport: {}", metarDataList.size(), icaoCode);
+        return metarDataList;
     }
 }
     

@@ -6,9 +6,9 @@
 # Configuration
 DB_HOST="localhost"
 DB_PORT="5432"
-DB_NAME="metar_service"
-DB_USER="metar_user"
-DB_PASSWORD="metar_password"
+DB_NAME="metar_service_dev"
+DB_USER="metar_user_dev"
+DB_PASSWORD="metar_password_dev"
 SERVICE_URL="http://localhost:8080"
 
 # Colors for output

@@ -4,6 +4,7 @@ GRANT ALL PRIVILEGES ON DATABASE metar_service_dev TO metar_user_dev;
 
 -- Connect to the metar_service database and grant schema permissions
 \connect metar_service_dev;
+
 GRANT ALL ON SCHEMA public TO metar_user_dev;
 GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO metar_user_dev;
 GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO metar_user_dev;

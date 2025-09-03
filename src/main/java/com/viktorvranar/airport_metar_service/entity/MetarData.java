@@ -40,27 +40,27 @@ public class MetarData {
     /**
      * The observation time of the METAR data.
      */
-    @Column(name = "observation_time")
-    private LocalDateTime observationTime;
+    /* @Column(name = "observation_time")
+    private LocalDateTime observationTime; */
 
     /**
      * The wind speed in knots.
      */
-    @Column(name = "wind_speed")
-    private Integer windSpeed;
+    /*@Column(name = "wind_speed")
+    private Integer windSpeed; */
     
     /**
      * The temperature in Celsius.
      */
-    @Column(name = "temperature")
-    private Integer temperature;
+    /*@Column(name = "temperature")
+    private Integer temperature; */
     
     /**
      * The visibility in meters.
      */
-    @Column(name = "visibility")
+   /*  @Column(name = "visibility")
     private Integer visibility;
-    public MetarData() {}
+    public MetarData() {} */
     
     /**
      * Get the unique identifier for the METAR data record.
@@ -121,70 +121,70 @@ public class MetarData {
      *
      * @return the observationTime
      */
-    public LocalDateTime getObservationTime() {
+    /* public LocalDateTime getObservationTime() {
         return observationTime;
-    }
+    } */
     
     /**
      * Set the observation time of the METAR data.
      *
      * @param observationTime the observationTime to set
      */
-    public void setObservationTime(LocalDateTime observationTime) {
+    /* public void setObservationTime(LocalDateTime observationTime) {
         this.observationTime = observationTime;
-    }
+    } */
     
     /**
      * Get the wind speed in knots.
      *
      * @return the windSpeed
      */
-    public Integer getWindSpeed() {
+    /* public Integer getWindSpeed() {
         return windSpeed;
-    }
+    } */
     
     /**
      * Set the wind speed in knots.
      *
      * @param windSpeed the windSpeed to set
      */
-    public void setWindSpeed(Integer windSpeed) {
+    /* public void setWindSpeed(Integer windSpeed) {
         this.windSpeed = windSpeed;
-    }
+    } */
     
     /**
      * Get the temperature in Celsius.
      *
      * @return the temperature
      */
-    public Integer getTemperature() {
+    /* public Integer getTemperature() {
         return temperature;
-    }
+    } */
     
     /**
      * Set the temperature in Celsius.
      *
      * @param temperature the temperature to set
      */
-    public void setTemperature(Integer temperature) {
+    /* public void setTemperature(Integer temperature) {
         this.temperature = temperature;
-    }
+    } */
     
     /**
      * Get the visibility in meters.
      *
      * @return the visibility
      */
-    public Integer getVisibility() {
+    /* public Integer getVisibility() {
         return visibility;
-    }
+    } */
     
     /**
      * Set the visibility in meters.
      *
      * @param visibility the visibility to set
      */
-    public void setVisibility(Integer visibility) {
+    /* public void setVisibility(Integer visibility) {
         this.visibility = visibility;
-    }
+    } */
 }

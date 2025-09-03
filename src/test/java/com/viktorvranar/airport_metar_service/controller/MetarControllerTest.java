@@ -87,4 +87,20 @@ class MetarControllerTest {
         mockMvc.perform(get("/airport/{icaoCode}/METAR", icaoCode))
                 .andExpect(status().isNotFound());
     }
+    
+    @Test
+    void testStoreMetarDataValidationFailure() throws Exception {
+        // Given
+        String icaoCode = "LDZA";
+        
+        // Create request object with blank data
+        MetarController.MetarDataRequest request = new MetarController.MetarDataRequest();
+        request.setData(""); // Blank data should trigger validation error
+
+        // When & Then
+        mockMvc.perform(post("/airport/{icaoCode}/METAR", icaoCode)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isBadRequest());
+    }
 }

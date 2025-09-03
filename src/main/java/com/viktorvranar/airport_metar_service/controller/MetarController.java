@@ -15,6 +15,18 @@ import org.springframework.web.bind.annotation.RestController;
 import com.viktorvranar.airport_metar_service.entity.MetarData;
 import com.viktorvranar.airport_metar_service.service.MetarService;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
+/**
+ * REST controller for managing METAR (Meteorological Terminal Aviation Routine Weather Report) data.
+ * Provides endpoints for storing and retrieving METAR data for airports.
+ */
+/**
+ * REST controller for managing METAR data.
+ * Provides endpoints for storing and retrieving METAR data for airports.
+ */
 @RestController
 @RequestMapping("/airport")
 public class MetarController {
@@ -27,11 +39,17 @@ public class MetarController {
         this.metarService = metarService;
     }
     
-    // Store METAR data for an airport
+    /**
+     * Store METAR data for an airport.
+     *
+     * @param icaoCode the ICAO code of the airport
+     * @param request the request containing METAR data
+     * @return ResponseEntity with the saved METAR data
+     */
     @PostMapping("/{icaoCode}/METAR")
     public ResponseEntity<MetarData> storeMetarData(
             @PathVariable String icaoCode,
-            @RequestBody MetarDataRequest request) {
+            @Valid @RequestBody MetarDataRequest request) {
         
         logger.info("Storing METAR data for airport: {}", icaoCode);
         MetarData metarData = metarService.saveMetarData(icaoCode, request.getData());
@@ -39,7 +57,12 @@ public class MetarController {
         return new ResponseEntity<>(metarData, HttpStatus.CREATED);
     }
     
-    // Retrieve the latest METAR data for an airport
+    /**
+     * Retrieve the latest METAR data for an airport.
+     *
+     * @param icaoCode the ICAO code of the airport
+     * @return ResponseEntity with the latest METAR data or NOT_FOUND if no data exists
+     */
     @GetMapping("/{icaoCode}/METAR")
     public ResponseEntity<MetarData> getLatestMetarData(@PathVariable String icaoCode) {
         logger.info("Retrieving latest METAR data for airport: {}", icaoCode);
@@ -53,8 +76,11 @@ public class MetarController {
         }
     }
     
-    // DTO class for request body
+    /**
+     * DTO class for METAR data request body.
+     */
     public static class MetarDataRequest {
+        @NotBlank(message = "METAR data cannot be blank")
         private String data;
         
         public String getData() {

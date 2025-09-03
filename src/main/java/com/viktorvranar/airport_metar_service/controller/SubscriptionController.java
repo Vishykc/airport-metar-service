@@ -16,16 +16,32 @@ import org.springframework.web.bind.annotation.RestController;
 import com.viktorvranar.airport_metar_service.entity.Subscription;
 import com.viktorvranar.airport_metar_service.service.SubscriptionService;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+
+/**
+ * REST controller for managing airport subscriptions.
+ * Provides endpoints for creating, retrieving, and deleting subscriptions.
+ */
 @RestController
 @RequestMapping("/subscriptions")
 public class SubscriptionController {
     
-    @Autowired
-    private SubscriptionService subscriptionService;
+    private final SubscriptionService subscriptionService;
     
-    // Subscribe to an airport
+    public SubscriptionController(SubscriptionService subscriptionService) {
+        this.subscriptionService = subscriptionService;
+    }
+    
+    /**
+     * Subscribe to an airport by ICAO code.
+     *
+     * @param request the subscription request containing the ICAO code
+     * @return ResponseEntity with the created subscription or CONFLICT if already exists
+     */
     @PostMapping
-    public ResponseEntity<Subscription> subscribe(@RequestBody SubscriptionRequest request) {
+    public ResponseEntity<Subscription> subscribe(@Valid @RequestBody SubscriptionRequest request) {
         if (subscriptionService.existsByIcaoCode(request.getIcaoCode())) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
@@ -34,14 +50,23 @@ public class SubscriptionController {
         return new ResponseEntity<>(subscription, HttpStatus.CREATED);
     }
     
-    // Get all subscriptions
+    /**
+     * Get all subscriptions.
+     *
+     * @return ResponseEntity with a list of all subscriptions
+     */
     @GetMapping
     public ResponseEntity<List<Subscription>> getAllSubscriptions() {
         List<Subscription> subscriptions = subscriptionService.findAllSubscriptions();
         return new ResponseEntity<>(subscriptions, HttpStatus.OK);
     }
        
-    // Unsubscribe from an airport
+    /**
+     * Unsubscribe from an airport by ICAO code.
+     *
+     * @param icaoCode the ICAO code of the airport to unsubscribe from
+     * @return ResponseEntity with NO_CONTENT if successful or NOT_FOUND if subscription doesn't exist
+     */
     @DeleteMapping("/{icaoCode}")
     public ResponseEntity<Void> unsubscribe(@PathVariable String icaoCode) {
         if (!subscriptionService.existsByIcaoCode(icaoCode)) {
@@ -53,7 +78,12 @@ public class SubscriptionController {
     }
     
     // DTO classes for request bodies
+    /**
+     * DTO class for subscription request body.
+     */
     public static class SubscriptionRequest {
+        @NotBlank(message = "ICAO code cannot be blank")
+        @Pattern(regexp = "^[A-Z0-9]{4}$", message = "ICAO code must be exactly 4 alphanumeric characters")
         private String icaoCode;
         
         public String getIcaoCode() {
@@ -65,7 +95,11 @@ public class SubscriptionController {
         }
     }
     
+    /**
+     * DTO class for subscription status request body.
+     */
     public static class SubscriptionStatusRequest {
+        @NotBlank(message = "Active status cannot be blank")
         private String active;
         
         public String getActive() {

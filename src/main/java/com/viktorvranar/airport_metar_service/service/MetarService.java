@@ -15,6 +15,10 @@ import com.viktorvranar.airport_metar_service.entity.MetarData;
 import com.viktorvranar.airport_metar_service.exception.MetarDataNotFoundException;
 import com.viktorvranar.airport_metar_service.repository.MetarDataRepository;
     
+/**
+ * Service class for managing METAR (Meteorological Terminal Aviation Routine Weather Report) data.
+ * Provides business logic for storing and retrieving METAR data for airports.
+ */
 @Service
 public class MetarService {
     
@@ -26,6 +30,13 @@ public class MetarService {
         this.metarDataRepository = metarDataRepository;
     }
     
+    /**
+     * Save METAR data for an airport.
+     *
+     * @param icaoCode the ICAO code of the airport
+     * @param rawData the raw METAR data string
+     * @return the saved MetarData entity
+     */
     public MetarData saveMetarData(String icaoCode, String rawData) {
         logger.debug("Saving METAR data for airport: {}", icaoCode);
         MetarData metarData = new MetarData();
@@ -42,6 +53,13 @@ public class MetarService {
         return savedData;
     }
     
+    /**
+     * Get the latest METAR data for an airport.
+     *
+     * @param icaoCode the ICAO code of the airport
+     * @return the latest MetarData entity
+     * @throws MetarDataNotFoundException if no METAR data is found for the airport
+     */
     public MetarData getLatestMetarData(String icaoCode) {
         logger.debug("Retrieving latest METAR data for airport: {}", icaoCode);
         Optional<MetarData> metarData = metarDataRepository.findFirstByIcaoCodeOrderByIdDesc(icaoCode);
@@ -54,6 +72,12 @@ public class MetarService {
         }
     }
     
+    /**
+     * Get the METAR data history for an airport.
+     *
+     * @param icaoCode the ICAO code of the airport
+     * @return a list of MetarData entities
+     */
     public List<MetarData> getMetarDataHistory(String icaoCode) {
         logger.debug("Retrieving METAR data history for airport: {}", icaoCode);
         List<MetarData> metarDataList = metarDataRepository.findByIcaoCode(icaoCode);

@@ -10,16 +10,34 @@ import com.viktorvranar.airport_metar_service.entity.Subscription;
 import com.viktorvranar.airport_metar_service.repository.SubscriptionRepository;
 
 @Service
+/**
+ * Service class for managing airport subscriptions.
+ * Provides business logic for creating, retrieving, and deleting subscriptions.
+ */
 public class SubscriptionService {
+    
+    private final SubscriptionRepository subscriptionRepository;
+    
+    public SubscriptionService(SubscriptionRepository subscriptionRepository) {
+        this.subscriptionRepository = subscriptionRepository;
+    }
 
-    @Autowired
-    private SubscriptionRepository subscriptionRepository;
-
+    /**
+     * Create a new subscription for an airport.
+     *
+     * @param icaoCode the ICAO code of the airport to subscribe to
+     * @return the created Subscription entity
+     */
     public Subscription createSubscription(String icaoCode) {
         Subscription subscription = new Subscription(icaoCode);
         return subscriptionRepository.save(subscription);
     }
 
+    /**
+     * Find all subscriptions.
+     *
+     * @return a list of all Subscription entities
+     */
     public List<Subscription> findAllSubscriptions() {
         return subscriptionRepository.findAll();
     }
@@ -29,10 +47,22 @@ public class SubscriptionService {
         return subscriptionRepository.findByActiveTrue();
     } */
     
+    /**
+     * Get a subscription by ICAO code.
+     *
+     * @param icaoCode the ICAO code of the airport
+     * @return an Optional containing the Subscription entity if found, or empty if not found
+     */
     public Optional<Subscription> getSubscriptionByIcaoCode(String icaoCode) {
         return subscriptionRepository.findByIcaoCode(icaoCode);
     }
     
+    /**
+     * Check if a subscription exists for an ICAO code.
+     *
+     * @param icaoCode the ICAO code of the airport
+     * @return true if a subscription exists, false otherwise
+     */
     public boolean existsByIcaoCode(String icaoCode) {
         return subscriptionRepository.existsByIcaoCode(icaoCode);
     }
@@ -48,6 +78,11 @@ public class SubscriptionService {
         return null;
     } */
 
+    /**
+     * Delete a subscription by ICAO code.
+     *
+     * @param icaoCode the ICAO code of the airport to unsubscribe from
+     */
     public void deleteSubscription(String icaoCode) {
         Optional<Subscription> subscriptionOpt = subscriptionRepository.findByIcaoCode(icaoCode);
         if (subscriptionOpt.isPresent()) {
@@ -56,6 +91,9 @@ public class SubscriptionService {
     }
 
     // DTO classes for request bodies
+    /**
+     * DTO class for subscription request body.
+     */
     public static class SubscriptionRequest {
         private String icaoCode;
         
@@ -68,6 +106,9 @@ public class SubscriptionService {
         }
     }
     
+    /**
+     * DTO class for subscription status request body.
+     */
     public static class SubscriptionStatusRequest {
         private String active;
         

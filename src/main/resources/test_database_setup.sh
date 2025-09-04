@@ -62,13 +62,16 @@ else
     exit 1
 fi
 
-# Test 2: Check user permissions
+# Test 2: Check user permissions (CREATE TABLE)
 log_message "Test 2: Checking user permissions..."
-PERMISSION_CHECK=$(PGPASSWORD=$DB_PASSWORD psql -h $DB_HOST -p $DB_PORT -U $DB_USER -d $DB_NAME -c "CREATE TABLE test_permission (id SERIAL PRIMARY KEY, test_data VARCHAR(50));" 2>&1)
-if [[ $PERMISSION_CHECK == *"CREATE TABLE"* ]]; then
+PERMISSION_CHECK=$(PGPASSWORD=$DB_PASSWORD psql -h $DB_HOST -p $DB_PORT -U $DB_USER -d $DB_NAME \
+    -c "CREATE TABLE IF NOT EXISTS test_permission (id SERIAL PRIMARY KEY, test_data VARCHAR(50));" 2>&1)
+
+if [[ $PERMISSION_CHECK == *"CREATE TABLE"* || $PERMISSION_CHECK == *"CREATE TABLE"* ]]; then
     log_success "✓ User has permission to create tables"
     # Clean up test table
-    PGPASSWORD=$DB_PASSWORD psql -h $DB_HOST -p $DB_PORT -U $DB_USER -d $DB_NAME -c "DROP TABLE test_permission;" >/dev/null 2>&1
+    PGPASSWORD=$DB_PASSWORD psql -h $DB_HOST -p $DB_PORT -U $DB_USER -d $DB_NAME \
+        -c "DROP TABLE IF EXISTS test_permission;" >/dev/null 2>&1
 else
     log_error "✗ User does not have permission to create tables"
     echo "  Please ensure you've run the complete sql_script_for_creating_database_and_user.sql"
@@ -76,10 +79,12 @@ else
     exit 1
 fi
 
-# Test 3: Check schema permissions
-log_message "Test 3: Checking schema permissions..."
-SCHEMA_CHECK=$(PGPASSWORD=$DB_PASSWORD psql -h $DB_HOST -p $DB_PORT -U $DB_USER -d $DB_NAME -c "SELECT has_schema_privilege('metar_user', 'public', 'CREATE');" -t 2>/dev/null | tr -d ' ')
-if [[ $SCHEMA_CHECK == "t" ]]; then
+# Test 3: Check schema privileges using has_schema_privilege()
+log_message "Test 3: Checking schema CREATE permission..."
+SCHEMA_CHECK=$(PGPASSWORD=$DB_PASSWORD psql -h $DB_HOST -p $DB_PORT -U $DB_USER -d $DB_NAME \
+    -t -c "SELECT has_schema_privilege('$DB_USER', 'public', 'CREATE');" 2>/dev/null | tr -d ' ')
+
+if [[ "$SCHEMA_CHECK" == "t" ]]; then
     log_success "✓ User has CREATE permission on public schema"
 else
     log_error "✗ User does not have CREATE permission on public schema"

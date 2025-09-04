@@ -65,4 +65,17 @@ public class MetarService {
             throw new MetarDataNotFoundException(icaoCode);
         }
     }
+
+    /**
+     * Get the METAR data history for an airport.
+     *
+     * @param icaoCode the ICAO code of the airport
+     * @return a list of MetarData entities
+     */
+    public List<MetarData> getMetarDataHistory(String icaoCode) {
+        logger.debug("Retrieving METAR data history for airport: {}", icaoCode);
+        List<MetarData> metarDataList = metarDataRepository.findByIcaoCode(icaoCode);
+        logger.debug("Found {} METAR data entries for airport: {}", metarDataList.size(), icaoCode);
+        return metarDataList;
+    } 
 }

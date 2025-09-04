@@ -72,6 +72,34 @@
 						"description": "Unsubscribe from an airport by ICAO code"
 					},
 					"response": []
+				},
+				{
+					"name": "Update Subscription Status",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"active\": \"0\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/subscriptions/LDZA",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"subscriptions",
+								"LDZA"
+							]
+						},
+						"description": "Update the active status of an airport subscription (0=inactive, 1=active)"
+					},
+					"response": []
 				}
 			]
 		},

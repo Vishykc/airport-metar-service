@@ -77,6 +77,23 @@ public class SubscriptionService {
             subscriptionRepository.delete(subscriptionOpt.get());
         }
     }
+    
+    /**
+     * Update the active status of a subscription.
+     *
+     * @param icaoCode the ICAO code of the airport
+     * @param active the new active status (true to activate, false to deactivate)
+     * @return the updated Subscription entity, or null if not found
+     */
+    public Subscription updateSubscriptionStatus(String icaoCode, boolean active) {
+        Optional<Subscription> subscriptionOpt = subscriptionRepository.findByIcaoCode(icaoCode);
+        if (subscriptionOpt.isPresent()) {
+            Subscription subscription = subscriptionOpt.get();
+            subscription.setActive(active);
+            return subscriptionRepository.save(subscription);
+        }
+        return null;
+    }
 
     // DTO classes for request bodies
     /**
@@ -94,19 +111,5 @@ public class SubscriptionService {
         }
     }
     
-    /**
-     * DTO class for subscription status request body.
-     */
-    public static class SubscriptionStatusRequest {
-        private String active;
-        
-        public String getActive() {
-            return active;
-        }
-        
-        public void setActive(String active) {
-            this.active = active;
-        }
-    }
     
 }

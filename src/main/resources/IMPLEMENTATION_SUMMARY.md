@@ -93,5 +93,10 @@ The service can be tested manually by:
 2. Subscribing to an airport using the API
 3. Running the fetch_metar_data.sh script
 4. Retrieving the stored METAR data through the API
+5. Deactivating a subscription using the PUT endpoint:
+   - Example: `PUT /subscriptions/LDZA` with JSON payload `{"active": "0"}` deactivates the Zagreb airport subscription
+6. Activating a subscription using the PUT endpoint:
+   - Example: `PUT /subscriptions/LDZA` with JSON payload `{"active": "1"}` activates the Zagreb airport subscription
+7. Alternatively, you can use the provided test script `TEST_PUT_ENDPOINT.sh` which demonstrates all the PUT endpoint functionality
 
 All required components have been implemented according to the assignment specifications.

@@ -125,4 +125,41 @@ class SubscriptionServiceTest {
         // Then
         verify(subscriptionRepository, times(0)).delete(any(Subscription.class));
     }
+    
+    @Test
+    void testUpdateSubscriptionStatus() {
+        // Given
+        String icaoCode = "LDZA";
+        Subscription subscription = new Subscription(icaoCode);
+        subscription.setId(1L);
+        subscription.setActive(true);
+        
+        when(subscriptionRepository.findByIcaoCode(icaoCode)).thenReturn(Optional.of(subscription));
+        when(subscriptionRepository.save(any(Subscription.class))).thenReturn(subscription);
+        
+        // When
+        Subscription result = subscriptionService.updateSubscriptionStatus(icaoCode, false);
+        
+        // Then
+        assertNotNull(result);
+        assertEquals(icaoCode, result.getIcaoCode());
+        assertFalse(result.isActive());
+        verify(subscriptionRepository, times(1)).findByIcaoCode(icaoCode);
+        verify(subscriptionRepository, times(1)).save(subscription);
+    }
+    
+    @Test
+    void testUpdateSubscriptionStatusNotFound() {
+        // Given
+        String icaoCode = "LDZA";
+        when(subscriptionRepository.findByIcaoCode(icaoCode)).thenReturn(Optional.empty());
+        
+        // When
+        Subscription result = subscriptionService.updateSubscriptionStatus(icaoCode, false);
+        
+        // Then
+        assertNull(result);
+        verify(subscriptionRepository, times(1)).findByIcaoCode(icaoCode);
+        verify(subscriptionRepository, times(0)).save(any(Subscription.class));
+    }
 }

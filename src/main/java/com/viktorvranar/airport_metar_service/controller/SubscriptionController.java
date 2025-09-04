@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -76,6 +77,29 @@ public class SubscriptionController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
     
+    /**
+     * Update the active status of an airport subscription.
+     *
+     * @param icaoCode the ICAO code of the airport
+     * @param request the request containing the new active status
+     * @return ResponseEntity with the updated subscription or NOT_FOUND if subscription doesn't exist
+     */
+    @PutMapping("/{icaoCode}")
+    public ResponseEntity<Subscription> updateSubscriptionStatus(
+            @PathVariable String icaoCode,
+            @Valid @RequestBody SubscriptionStatusRequest request) {
+        
+        // Convert string to boolean properly handling "0"/"1" and "false"/"true"
+        boolean active = parseBoolean(request.getActive());
+        
+        Subscription updatedSubscription = subscriptionService.updateSubscriptionStatus(icaoCode, active);
+        if (updatedSubscription != null) {
+            return new ResponseEntity<>(updatedSubscription, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+    
     // DTO classes for request bodies
     /**
      * DTO class for subscription request body.
@@ -92,5 +116,33 @@ public class SubscriptionController {
         public void setIcaoCode(String icaoCode) {
             this.icaoCode = icaoCode;
         }
+    }
+    
+    /**
+     * DTO class for subscription status request body.
+     */
+    public static class SubscriptionStatusRequest {
+        private String active;
+        
+        public String getActive() {
+            return active;
+        }
+        
+        public void setActive(String active) {
+            this.active = active;
+        }
+    }
+    
+    /**
+     * Parse a string to boolean, handling "0"/"1" and "false"/"true" values.
+     *
+     * @param value the string value to parse
+     * @return true if value is "1" or "true" (case-insensitive), false otherwise
+     */
+    private boolean parseBoolean(String value) {
+        if (value == null) {
+            return false;
+        }
+        return "1".equals(value) || "true".equalsIgnoreCase(value);
     }
 }

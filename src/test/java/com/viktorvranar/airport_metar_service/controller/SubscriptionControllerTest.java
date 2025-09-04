@@ -16,6 +16,7 @@ import java.util.List;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(SubscriptionController.class)
@@ -128,5 +129,94 @@ class SubscriptionControllerTest {
         // When & Then
         mockMvc.perform(delete("/subscriptions/{icaoCode}", icaoCode))
                 .andExpect(status().isNotFound());
+    }
+    
+    @Test
+    void testUpdateSubscriptionStatus() throws Exception {
+        // Given
+        String icaoCode = "LDZA";
+        Subscription subscription = new Subscription(icaoCode);
+        subscription.setId(1L);
+        subscription.setActive(false);
+        
+        when(subscriptionService.updateSubscriptionStatus(icaoCode, false)).thenReturn(subscription);
+        
+        // Create request object
+        SubscriptionController.SubscriptionStatusRequest request = new SubscriptionController.SubscriptionStatusRequest();
+        request.setActive("0");
+        
+        // When & Then
+        mockMvc.perform(put("/subscriptions/{icaoCode}", icaoCode)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(1L))
+                .andExpect(jsonPath("$.icaoCode").value(icaoCode))
+                .andExpect(jsonPath("$.active").value(false));
+    }
+    
+    @Test
+    void testUpdateSubscriptionStatusNotFound() throws Exception {
+        // Given
+        String icaoCode = "LDZA";
+        when(subscriptionService.updateSubscriptionStatus(icaoCode, false)).thenReturn(null);
+        
+        // Create request object
+        SubscriptionController.SubscriptionStatusRequest request = new SubscriptionController.SubscriptionStatusRequest();
+        request.setActive("0");
+        
+        // When & Then
+        mockMvc.perform(put("/subscriptions/{icaoCode}", icaoCode)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isNotFound());
+    }
+    
+    @Test
+    void testUpdateSubscriptionStatusActivate() throws Exception {
+        // Given
+        String icaoCode = "LDZA";
+        Subscription subscription = new Subscription(icaoCode);
+        subscription.setId(1L);
+        subscription.setActive(true);
+        
+        when(subscriptionService.updateSubscriptionStatus(icaoCode, true)).thenReturn(subscription);
+        
+        // Create request object with "1"
+        SubscriptionController.SubscriptionStatusRequest request = new SubscriptionController.SubscriptionStatusRequest();
+        request.setActive("1");
+        
+        // When & Then
+        mockMvc.perform(put("/subscriptions/{icaoCode}", icaoCode)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(1L))
+                .andExpect(jsonPath("$.icaoCode").value(icaoCode))
+                .andExpect(jsonPath("$.active").value(true));
+    }
+    
+    @Test
+    void testUpdateSubscriptionStatusActivateWithTrue() throws Exception {
+        // Given
+        String icaoCode = "LDZA";
+        Subscription subscription = new Subscription(icaoCode);
+        subscription.setId(1L);
+        subscription.setActive(true);
+        
+        when(subscriptionService.updateSubscriptionStatus(icaoCode, true)).thenReturn(subscription);
+        
+        // Create request object with "true"
+        SubscriptionController.SubscriptionStatusRequest request = new SubscriptionController.SubscriptionStatusRequest();
+        request.setActive("true");
+        
+        // When & Then
+        mockMvc.perform(put("/subscriptions/{icaoCode}", icaoCode)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(1L))
+                .andExpect(jsonPath("$.icaoCode").value(icaoCode))
+                .andExpect(jsonPath("$.active").value(true));
     }
 }

@@ -4,12 +4,13 @@
 # This script should be run on a Linux system with access to the database and service
 
 # Configuration
-DB_HOST="localhost"
+DB_HOST="localhost" # or 10.255.255.254
 DB_PORT="5432"
 DB_NAME="metar_service_dev"
 DB_USER="metar_user_dev"
 DB_PASSWORD="metar_password_dev"
-SERVICE_URL="http://localhost:8080"
+SERVICE_URL="http://localhost:8080" 
+# or SERVICE_URL="http://host.docker.internal:8080"
 
 # Colors for output
 RED='\033[0;31m'

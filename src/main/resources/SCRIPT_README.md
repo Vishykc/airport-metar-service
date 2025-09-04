@@ -44,6 +44,9 @@ The script requires the following configuration parameters, which can be modifie
    ```bash
    # Run every hour
    0 * * * * /path/to/fetch_metar_data.sh >> /var/log/metar_fetch.log 2>&1
+
+   # Or every minute like this if no permissions
+   * * * * * fetch_metar_data.sh >> /home/youruser/metar_fetch.log 2>&1
    ```
 
 ## How It Works

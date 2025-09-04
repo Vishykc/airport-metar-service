@@ -108,7 +108,10 @@ store_metar_data() {
     log_message "Storing METAR data for $ICAO_CODE"
     
     # Create JSON payload
-    local JSON_PAYLOAD="{\"data\": \"$METAR_DATA\"}"
+    # Properly escape METAR data for JSON
+    # Replace newlines with \n and escape quotes
+    local ESCAPED_METAR_DATA=$(echo "$METAR_DATA" | sed ':a;N;$!ba;s/\n/\\n/g' | sed 's/"/\\"/g')
+    local JSON_PAYLOAD="{\"data\": \"$ESCAPED_METAR_DATA\"}"
     
     # Send data to service
     local RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" -X POST \

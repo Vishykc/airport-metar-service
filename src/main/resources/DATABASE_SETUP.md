@@ -34,11 +34,11 @@ Alternatively, copy and paste the contents of the script directly into the psql 
 
 ```sql
 CREATE DATABASE metar_service_dev;
-CREATE USER metar_user WITH ENCRYPTED PASSWORD 'metar_password_dev';
+CREATE USER metar_user_dev WITH ENCRYPTED PASSWORD 'metar_password_dev';
 GRANT ALL PRIVILEGES ON DATABASE metar_service_dev TO metar_user_dev;
 
 -- Connect to the metar_service database and grant schema permissions
-\connect metar_service;
+\connect metar_service_dev;
 GRANT ALL ON SCHEMA public TO metar_user_dev;
 GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO metar_user_dev;
 GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO metar_user_dev;
@@ -51,7 +51,7 @@ ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON SEQUENCES TO metar_user_d
 You can verify that the user has the correct permissions by connecting as the metar_user:
 
 ```bash
-psql -U metar_user -d metar_service -h localhost -p 5432
+psql -U metar_user_dev -d metar_service_dev -h localhost -p 5432
 ```
 
 Then check permissions:

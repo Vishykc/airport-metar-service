@@ -41,11 +41,6 @@ public class MetarService {
         MetarData metarData = new MetarData();
         metarData.setIcaoCode(icaoCode);
         metarData.setRawData(rawData);
-        /* TODO for extra tasks
-        metarData.setObservationTime(LocalDateTime.now()); */
-        
-        /* TODO for EKSTRA TASKS Parse METAR data for specific fields
-        parseMetarData(metarData, rawData); */
         
         MetarData savedData = metarDataRepository.save(metarData);
         logger.debug("Successfully saved METAR data for airport: {} with ID: {}", icaoCode, savedData.getId());
@@ -70,22 +65,4 @@ public class MetarService {
             throw new MetarDataNotFoundException(icaoCode);
         }
     }
-    
-    /**
-     * Get the METAR data history for an airport.
-     *
-     * @param icaoCode the ICAO code of the airport
-     * @return a list of MetarData entities
-     */
-    /* public List<MetarData> getMetarDataHistory(String icaoCode) {
-        logger.debug("Retrieving METAR data history for airport: {}", icaoCode);
-        List<MetarData> metarDataList = metarDataRepository.findByIcaoCode(icaoCode);
-        logger.debug("Found {} METAR data entries for airport: {}", metarDataList.size(), icaoCode);
-        return metarDataList;
-    } */
 }
-    
-        /* TODO for EKSTRA TASKS Parse METAR data for specific fields
-        private void parseMetarData(MetarData metarData, String rawData) {
-
-    } */

@@ -93,20 +93,4 @@ public class SubscriptionController {
             this.icaoCode = icaoCode;
         }
     }
-    
-    /**
-     * DTO class for subscription status request body.
-     */
-    public static class SubscriptionStatusRequest {
-        @NotBlank(message = "Active status cannot be blank")
-        private String active;
-        
-        public String getActive() {
-            return active;
-        }
-        
-        public void setActive(String active) {
-            this.active = active;
-        }
-    }
 }

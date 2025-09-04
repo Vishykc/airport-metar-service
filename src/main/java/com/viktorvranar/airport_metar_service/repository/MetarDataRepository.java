@@ -20,7 +20,7 @@ public interface MetarDataRepository extends JpaRepository<MetarData, Long> {
      * @param icaoCode the ICAO code of the airport
      * @return an Optional containing the latest METAR data if found, or empty if not found
      */
-    // Modified to not use observationTime field which is not currently in the entity
+    
     Optional<MetarData> findFirstByIcaoCodeOrderByIdDesc(String icaoCode);
 
     /**

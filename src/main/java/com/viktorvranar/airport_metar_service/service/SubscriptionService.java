@@ -66,17 +66,6 @@ public class SubscriptionService {
         return subscriptionRepository.existsByIcaoCode(icaoCode);
     }
 
-    /* TODO for extra tasks
-    public Subscription updateSubscriptionStatus(String icaoCode, boolean active) {
-        Optional<Subscription> subscriptionOpt = subscriptionRepository.findByIcaoCode(icaoCode);
-        if (subscriptionOpt.isPresent()) {
-            Subscription subscription = subscriptionOpt.get();
-            subscription.setActive(active);
-            return subscriptionRepository.save(subscription);
-        }
-        return null;
-    } */
-
     /**
      * Delete a subscription by ICAO code.
      *

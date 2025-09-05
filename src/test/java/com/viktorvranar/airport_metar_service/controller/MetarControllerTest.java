@@ -188,6 +188,36 @@ class MetarControllerTest {
                 .andExpect(jsonPath("$.dewPoint").value("10"))
                 .andExpect(jsonPath("$.altimeter").value("Q1013"));
     }
+    
+    @Test
+    void testGetLatestMetarDataDecoded() throws Exception {
+        // Given
+        String icaoCode = "LDZA";
+        String rawData = "METAR LDZA 030700Z 00000KT 9999 NSW SCT040 15/10 Q1013 NOSIG";
+        
+        MetarData metarData = new MetarData();
+        metarData.setId(1L);
+        metarData.setIcaoCode(icaoCode);
+        metarData.setRawData(rawData);
+        // Set expected parsed values
+        metarData.setObservationTime("030700Z");
+        metarData.setWindDirection("000");
+        metarData.setWindSpeed("00");
+        metarData.setVisibility("9999");
+        metarData.setWeatherConditions("NSW SCT040");
+        metarData.setTemperature("15");
+        metarData.setDewPoint("10");
+        metarData.setAltimeter("Q1013");
+        
+        when(metarService.getLatestMetarData(icaoCode)).thenReturn(metarData);
+        when(metarService.decodeMetarData(metarData)).thenReturn("Weather report for airport LDZA. Observation time: 030700Z. Wind: from 000 degrees at 00 knots. Visibility: 9999 meters. Weather conditions: no significant weather scattered clouds at 040. Temperature: 15 degrees Celsius. Dew point: 10 degrees Celsius. Altimeter: Q1013.");
+
+        // When & Then
+        mockMvc.perform(get("/airport/{icaoCode}/METAR", icaoCode)
+                .param("decoded", "true"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.decodedData").value("Weather report for airport LDZA. Observation time: 030700Z. Wind: from 000 degrees at 00 knots. Visibility: 9999 meters. Weather conditions: no significant weather scattered clouds at 040. Temperature: 15 degrees Celsius. Dew point: 10 degrees Celsius. Altimeter: Q1013."));
+    }
 
     @Test
     void testGetLatestMetarDataNotFound() throws Exception {

@@ -62,16 +62,24 @@ public class MetarController {
      *
      * @param icaoCode the ICAO code of the airport
      * @param fields optional comma-separated list of fields to include in the response
+     * @param decoded optional parameter to request decoded METAR data in natural language
      * @return ResponseEntity with the latest METAR data or NOT_FOUND if no data exists
      */
     @GetMapping("/{icaoCode}/METAR")
     public ResponseEntity<?> getLatestMetarData(
             @PathVariable String icaoCode,
-            @RequestParam(required = false) String fields) {
+            @RequestParam(required = false) String fields,
+            @RequestParam(required = false, defaultValue = "false") boolean decoded) {
         logger.info("Retrieving latest METAR data for airport: {}", icaoCode);
         try {
             MetarData metarData = metarService.getLatestMetarData(icaoCode);
             logger.info("Successfully retrieved METAR data for airport: {} with ID: {}", icaoCode, metarData.getId());
+            
+            // If decoded parameter is true, return decoded data
+            if (decoded) {
+                String decodedData = metarService.decodeMetarData(metarData);
+                return new ResponseEntity<>(new MetarDataDecoded(decodedData), HttpStatus.OK);
+            }
             
             // If fields parameter is provided, return partial data
             if (fields != null && !fields.isEmpty()) {
@@ -238,6 +246,27 @@ public class MetarController {
         
         public void setAltimeter(String altimeter) {
             this.altimeter = altimeter;
+        }
+    }
+    
+    /**
+     * DTO class for decoded METAR data.
+     */
+    public static class MetarDataDecoded {
+        private String decodedData;
+        
+        public MetarDataDecoded() {}
+        
+        public MetarDataDecoded(String decodedData) {
+            this.decodedData = decodedData;
+        }
+        
+        public String getDecodedData() {
+            return decodedData;
+        }
+        
+        public void setDecodedData(String decodedData) {
+            this.decodedData = decodedData;
         }
     }
     

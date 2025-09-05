@@ -151,5 +151,91 @@ public class MetarService {
         List<MetarData> metarDataList = metarDataRepository.findByIcaoCode(icaoCode);
         logger.debug("Found {} METAR data entries for airport: {}", metarDataList.size(), icaoCode);
         return metarDataList;
-    } 
+    }
+    
+    /**
+     * Decode METAR data into natural language.
+     *
+     * @param metarData the MetarData entity to decode
+     * @return a string representation of the METAR data in natural language
+     */
+    public String decodeMetarData(MetarData metarData) {
+        StringBuilder decoded = new StringBuilder();
+        
+        // Add airport information
+        decoded.append("Weather report for airport ").append(metarData.getIcaoCode()).append(". ");
+        
+        // Add observation time
+        if (metarData.getObservationTime() != null && !metarData.getObservationTime().isEmpty()) {
+            decoded.append("Observation time: ").append(metarData.getObservationTime()).append(". ");
+        }
+        
+        // Add wind information
+        if (metarData.getWindDirection() != null && !metarData.getWindDirection().isEmpty() &&
+            metarData.getWindSpeed() != null && !metarData.getWindSpeed().isEmpty()) {
+            decoded.append("Wind: from ").append(metarData.getWindDirection())
+                   .append(" degrees at ").append(metarData.getWindSpeed()).append(" knots. ");
+        }
+        
+        // Add visibility
+        if (metarData.getVisibility() != null && !metarData.getVisibility().isEmpty()) {
+            decoded.append("Visibility: ").append(metarData.getVisibility()).append(" meters. ");
+        }
+        
+        // Add weather conditions
+        if (metarData.getWeatherConditions() != null && !metarData.getWeatherConditions().isEmpty()) {
+            decoded.append("Weather conditions: ").append(decodeWeatherConditions(metarData.getWeatherConditions())).append(". ");
+        }
+        
+        // Add temperature and dew point
+        if (metarData.getTemperature() != null && !metarData.getTemperature().isEmpty()) {
+            String temperature = metarData.getTemperature();
+            if (temperature.startsWith("M")) {
+                temperature = "-" + temperature.substring(1);
+            }
+            decoded.append("Temperature: ").append(temperature).append(" degrees Celsius. ");
+        }
+        
+        if (metarData.getDewPoint() != null && !metarData.getDewPoint().isEmpty()) {
+            String dewPoint = metarData.getDewPoint();
+            if (dewPoint.startsWith("M")) {
+                dewPoint = "-" + dewPoint.substring(1);
+            }
+            decoded.append("Dew point: ").append(dewPoint).append(" degrees Celsius. ");
+        }
+        
+        // Add altimeter
+        if (metarData.getAltimeter() != null && !metarData.getAltimeter().isEmpty()) {
+            decoded.append("Altimeter: ").append(metarData.getAltimeter()).append(". ");
+        }
+        
+        return decoded.toString().trim();
+    }
+    
+    /**
+     * Decode weather conditions abbreviations into natural language.
+     *
+     * @param conditions the weather conditions string
+     * @return decoded weather conditions
+     */
+    private String decodeWeatherConditions(String conditions) {
+        // Replace common weather condition abbreviations with natural language
+        return conditions
+            .replace("NSW", "no significant weather")
+            .replace("NCD", "nil cloud detected")
+            .replace("SKC", "sky clear")
+            .replace("CLR", "clear")
+            .replace("FEW", "few clouds at ")
+            .replace("SCT", "scattered clouds at ")
+            .replace("BKN", "broken clouds at ")
+            .replace("OVC", "overcast at ")
+            .replace("VV", "vertical visibility ")
+            .replace("R", "runway ")
+            .replace("/", " over ")
+            .replace("KT", " knots")
+            .replace("MPS", " meters per second")
+            .replace("SM", " statute miles")
+            .replace("Q", "QNH ")
+            .replace("A", "altimeter ");
+    }
 }

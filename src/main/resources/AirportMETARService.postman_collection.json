@@ -306,6 +306,32 @@
 						"description": "Get the latest METAR data for an airport with all fields specified"
 					},
 					"response": []
+				},
+				{
+					"name": "Get Latest METAR Data Decoded",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/airport/LDZA/METAR?decoded=true",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"airport",
+								"LDZA",
+								"METAR"
+							],
+							"query": [
+								{
+									"key": "decoded",
+									"value": "true"
+								}
+							]
+						},
+						"description": "Get the latest METAR data for an airport decoded into natural language"
+					},
+					"response": []
 				}
 			]
 		}

@@ -39,6 +39,15 @@ class MetarControllerTest {
         metarData.setId(1L);
         metarData.setIcaoCode(icaoCode);
         metarData.setRawData(rawData);
+        // Set expected parsed values
+        metarData.setObservationTime("030700Z");
+        metarData.setWindDirection("000");
+        metarData.setWindSpeed("00");
+        metarData.setVisibility("9999");
+        metarData.setWeatherConditions("NSW SCT040");
+        metarData.setTemperature("15");
+        metarData.setDewPoint("10");
+        metarData.setAltimeter("Q1013");
         
         when(metarService.saveMetarData(anyString(), anyString())).thenReturn(metarData);
 
@@ -53,7 +62,15 @@ class MetarControllerTest {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").value(1L))
                 .andExpect(jsonPath("$.icaoCode").value(icaoCode))
-                .andExpect(jsonPath("$.rawData").value(rawData));
+                .andExpect(jsonPath("$.rawData").value(rawData))
+                .andExpect(jsonPath("$.observationTime").value("030700Z"))
+                .andExpect(jsonPath("$.windDirection").value("000"))
+                .andExpect(jsonPath("$.windSpeed").value("00"))
+                .andExpect(jsonPath("$.visibility").value("9999"))
+                .andExpect(jsonPath("$.weatherConditions").value("NSW SCT040"))
+                .andExpect(jsonPath("$.temperature").value("15"))
+                .andExpect(jsonPath("$.dewPoint").value("10"))
+                .andExpect(jsonPath("$.altimeter").value("Q1013"));
     }
 
     @Test
@@ -66,6 +83,15 @@ class MetarControllerTest {
         metarData.setId(1L);
         metarData.setIcaoCode(icaoCode);
         metarData.setRawData(rawData);
+        // Set expected parsed values
+        metarData.setObservationTime("030700Z");
+        metarData.setWindDirection("000");
+        metarData.setWindSpeed("00");
+        metarData.setVisibility("9999");
+        metarData.setWeatherConditions("NSW SCT040");
+        metarData.setTemperature("15");
+        metarData.setDewPoint("10");
+        metarData.setAltimeter("Q1013");
         
         when(metarService.getLatestMetarData(icaoCode)).thenReturn(metarData);
 
@@ -74,7 +100,15 @@ class MetarControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1L))
                 .andExpect(jsonPath("$.icaoCode").value(icaoCode))
-                .andExpect(jsonPath("$.rawData").value(rawData));
+                .andExpect(jsonPath("$.rawData").value(rawData))
+                .andExpect(jsonPath("$.observationTime").value("030700Z"))
+                .andExpect(jsonPath("$.windDirection").value("000"))
+                .andExpect(jsonPath("$.windSpeed").value("00"))
+                .andExpect(jsonPath("$.visibility").value("9999"))
+                .andExpect(jsonPath("$.weatherConditions").value("NSW SCT040"))
+                .andExpect(jsonPath("$.temperature").value("15"))
+                .andExpect(jsonPath("$.dewPoint").value("10"))
+                .andExpect(jsonPath("$.altimeter").value("Q1013"));
     }
 
     @Test

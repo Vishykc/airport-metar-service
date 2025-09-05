@@ -29,7 +29,7 @@ public interface SubscriptionRepository extends JpaRepository<Subscription, Long
      *
      * @return a list of active Subscription entities
      */
-    /* List<Subscription> findByActiveTrue(); */
+    List<Subscription> findByActiveTrue();
 
     /**
      * Find subscriptions by active status.
@@ -37,8 +37,27 @@ public interface SubscriptionRepository extends JpaRepository<Subscription, Long
      * @param active the active status to filter by
      * @return a list of Subscription entities with the specified active status
      */
-    /* @Query("SELECT s FROM Subscription s WHERE s.active = ?1")
-    List<Subscription> findByActiveStatus(boolean active); */
+    @Query("SELECT s FROM Subscription s WHERE s.active = ?1")
+    List<Subscription> findByActiveStatus(boolean active);
+
+    /**
+     * Find subscriptions by ICAO code pattern (case-insensitive).
+     *
+     * @param icaoCodePattern the pattern to match ICAO codes against
+     * @return a list of Subscription entities matching the pattern
+     */
+    @Query("SELECT s FROM Subscription s WHERE UPPER(s.icaoCode) LIKE UPPER(?1)")
+    List<Subscription> findByIcaoCodePattern(String icaoCodePattern);
+
+    /**
+     * Find subscriptions by active status and ICAO code pattern (case-insensitive).
+     *
+     * @param active the active status to filter by
+     * @param icaoCodePattern the pattern to match ICAO codes against
+     * @return a list of Subscription entities matching the criteria
+     */
+    @Query("SELECT s FROM Subscription s WHERE s.active = ?1 AND UPPER(s.icaoCode) LIKE UPPER(?2)")
+    List<Subscription> findByActiveStatusAndIcaoCodePattern(boolean active, String icaoCodePattern);
 
     /**
      * Check if a subscription exists for an ICAO code.

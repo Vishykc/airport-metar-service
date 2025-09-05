@@ -41,10 +41,45 @@ public class SubscriptionService {
         return subscriptionRepository.findAll();
     }
 
-    /* TODO this is for extra tasks
+    /**
+     * Find all active subscriptions.
+     *
+     * @return a list of active Subscription entities
+     */
     public List<Subscription> getActiveSubscriptions() {
         return subscriptionRepository.findByActiveTrue();
-    } */
+    }
+    
+    /**
+     * Find subscriptions by active status.
+     *
+     * @param active the active status to filter by
+     * @return a list of Subscription entities with the specified active status
+     */
+    public List<Subscription> getSubscriptionsByActiveStatus(boolean active) {
+        return subscriptionRepository.findByActiveStatus(active);
+    }
+    
+    /**
+     * Find subscriptions by ICAO code pattern (case-insensitive).
+     *
+     * @param icaoCodePattern the pattern to match ICAO codes against (use % for wildcards)
+     * @return a list of Subscription entities matching the pattern
+     */
+    public List<Subscription> getSubscriptionsByIcaoCodePattern(String icaoCodePattern) {
+        return subscriptionRepository.findByIcaoCodePattern(icaoCodePattern);
+    }
+    
+    /**
+     * Find subscriptions by active status and ICAO code pattern (case-insensitive).
+     *
+     * @param active the active status to filter by
+     * @param icaoCodePattern the pattern to match ICAO codes against (use % for wildcards)
+     * @return a list of Subscription entities matching the criteria
+     */
+    public List<Subscription> getSubscriptionsByActiveStatusAndIcaoCodePattern(boolean active, String icaoCodePattern) {
+        return subscriptionRepository.findByActiveStatusAndIcaoCodePattern(active, icaoCodePattern);
+    }
     
     /**
      * Get a subscription by ICAO code.
@@ -93,22 +128,6 @@ public class SubscriptionService {
             return subscriptionRepository.save(subscription);
         }
         return null;
-    }
-
-    // DTO classes for request bodies
-    /**
-     * DTO class for subscription request body.
-     */
-    public static class SubscriptionRequest {
-        private String icaoCode;
-        
-        public String getIcaoCode() {
-            return icaoCode;
-        }
-        
-        public void setIcaoCode(String icaoCode) {
-            this.icaoCode = icaoCode;
-        }
     }
     
     

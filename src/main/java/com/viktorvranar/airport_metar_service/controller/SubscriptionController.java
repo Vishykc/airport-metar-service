@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.viktorvranar.airport_metar_service.entity.Subscription;
@@ -51,13 +52,33 @@ public class SubscriptionController {
     }
     
     /**
-     * Get all subscriptions.
+     * Get all subscriptions with optional filtering.
      *
-     * @return ResponseEntity with a list of all subscriptions
+     * @param active Optional filter for active status (true/false)
+     * @param icaoCode Optional filter for ICAO code pattern (case-insensitive, use % for wildcards)
+     * @return ResponseEntity with a list of subscriptions matching the filters
      */
     @GetMapping
-    public ResponseEntity<List<Subscription>> getAllSubscriptions() {
-        List<Subscription> subscriptions = subscriptionService.findAllSubscriptions();
+    public ResponseEntity<List<Subscription>> getAllSubscriptions(
+            @RequestParam(required = false) Boolean active,
+            @RequestParam(required = false) String icaoCode) {
+        
+        List<Subscription> subscriptions;
+        
+        if (active != null && icaoCode != null) {
+            // Filter by both active status and ICAO code pattern
+            subscriptions = subscriptionService.getSubscriptionsByActiveStatusAndIcaoCodePattern(active, "%" + icaoCode + "%");
+        } else if (active != null) {
+            // Filter by active status only
+            subscriptions = subscriptionService.getSubscriptionsByActiveStatus(active);
+        } else if (icaoCode != null) {
+            // Filter by ICAO code pattern only
+            subscriptions = subscriptionService.getSubscriptionsByIcaoCodePattern("%" + icaoCode + "%");
+        } else {
+            // No filters, return all subscriptions
+            subscriptions = subscriptionService.findAllSubscriptions();
+        }
+        
         return new ResponseEntity<>(subscriptions, HttpStatus.OK);
     }
        

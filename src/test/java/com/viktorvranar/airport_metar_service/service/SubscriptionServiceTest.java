@@ -64,6 +64,84 @@ class SubscriptionServiceTest {
         assertEquals(2, result.size());
         verify(subscriptionRepository, times(1)).findAll();
     }
+    
+    @Test
+    void testGetActiveSubscriptions() {
+        // Given
+        List<Subscription> subscriptions = Arrays.asList(
+            new Subscription("LDZA"),
+            new Subscription("LDDU")
+        );
+        
+        when(subscriptionRepository.findByActiveTrue()).thenReturn(subscriptions);
+
+        // When
+        List<Subscription> result = subscriptionService.getActiveSubscriptions();
+
+        // Then
+        assertNotNull(result);
+        assertEquals(2, result.size());
+        verify(subscriptionRepository, times(1)).findByActiveTrue();
+    }
+    
+    @Test
+    void testGetSubscriptionsByActiveStatus() {
+        // Given
+        List<Subscription> subscriptions = Arrays.asList(
+            new Subscription("LDZA"),
+            new Subscription("LDDU")
+        );
+        
+        when(subscriptionRepository.findByActiveStatus(true)).thenReturn(subscriptions);
+
+        // When
+        List<Subscription> result = subscriptionService.getSubscriptionsByActiveStatus(true);
+
+        // Then
+        assertNotNull(result);
+        assertEquals(2, result.size());
+        verify(subscriptionRepository, times(1)).findByActiveStatus(true);
+    }
+    
+    @Test
+    void testGetSubscriptionsByIcaoCodePattern() {
+        // Given
+        List<Subscription> subscriptions = Arrays.asList(
+            new Subscription("LDZA"),
+            new Subscription("LDDU")
+        );
+        String pattern = "%LD%";
+        
+        when(subscriptionRepository.findByIcaoCodePattern(pattern)).thenReturn(subscriptions);
+
+        // When
+        List<Subscription> result = subscriptionService.getSubscriptionsByIcaoCodePattern(pattern);
+
+        // Then
+        assertNotNull(result);
+        assertEquals(2, result.size());
+        verify(subscriptionRepository, times(1)).findByIcaoCodePattern(pattern);
+    }
+    
+    @Test
+    void testGetSubscriptionsByActiveStatusAndIcaoCodePattern() {
+        // Given
+        List<Subscription> subscriptions = Arrays.asList(
+            new Subscription("LDZA"),
+            new Subscription("LDDU")
+        );
+        String pattern = "%LD%";
+        
+        when(subscriptionRepository.findByActiveStatusAndIcaoCodePattern(true, pattern)).thenReturn(subscriptions);
+
+        // When
+        List<Subscription> result = subscriptionService.getSubscriptionsByActiveStatusAndIcaoCodePattern(true, pattern);
+
+        // Then
+        assertNotNull(result);
+        assertEquals(2, result.size());
+        verify(subscriptionRepository, times(1)).findByActiveStatusAndIcaoCodePattern(true, pattern);
+    }
 
     @Test
     void testGetSubscriptionByIcaoCode() {

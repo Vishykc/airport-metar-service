@@ -55,6 +55,106 @@
 					"response": []
 				},
 				{
+					"name": "Get Active Subscriptions",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/subscriptions?active=true",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"subscriptions"
+							],
+							"query": [
+								{
+									"key": "active",
+									"value": "true"
+								}
+							]
+						},
+						"description": "Get all active airport subscriptions"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Inactive Subscriptions",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/subscriptions?active=false",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"subscriptions"
+							],
+							"query": [
+								{
+									"key": "active",
+									"value": "false"
+								}
+							]
+						},
+						"description": "Get all inactive airport subscriptions"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Subscriptions by ICAO Code Pattern",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/subscriptions?icaoCode=LD",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"subscriptions"
+							],
+							"query": [
+								{
+									"key": "icaoCode",
+									"value": "LD"
+								}
+							]
+						},
+						"description": "Get all airport subscriptions matching the ICAO code pattern"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Active Subscriptions by ICAO Code Pattern",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/subscriptions?active=true&icaoCode=LD",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"subscriptions"
+							],
+							"query": [
+								{
+									"key": "active",
+									"value": "true"
+								},
+								{
+									"key": "icaoCode",
+									"value": "LD"
+								}
+							]
+						},
+						"description": "Get all active airport subscriptions matching the ICAO code pattern"
+					},
+					"response": []
+				},
+				{
 					"name": "Unsubscribe from Airport",
 					"request": {
 						"method": "DELETE",

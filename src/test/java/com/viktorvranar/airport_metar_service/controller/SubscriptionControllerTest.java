@@ -14,6 +14,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -105,6 +106,99 @@ class SubscriptionControllerTest {
                 .andExpect(jsonPath("$.length()").value(2))
                 .andExpect(jsonPath("$[0].icaoCode").value("LDZA"))
                 .andExpect(jsonPath("$[1].icaoCode").value("LDDU"));
+    }
+    
+    @Test
+    void testGetActiveSubscriptions() throws Exception {
+        // Given
+        Subscription subscription1 = new Subscription("LDZA");
+        subscription1.setId(1L);
+        subscription1.setActive(true);
+        Subscription subscription2 = new Subscription("LDDU");
+        subscription2.setId(2L);
+        subscription2.setActive(true);
+        List<Subscription> subscriptions = Arrays.asList(subscription1, subscription2);
+        
+        when(subscriptionService.getSubscriptionsByActiveStatus(true)).thenReturn(subscriptions);
+
+        // When & Then
+        mockMvc.perform(get("/subscriptions")
+                .param("active", "true"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(2))
+                .andExpect(jsonPath("$[0].icaoCode").value("LDZA"))
+                .andExpect(jsonPath("$[0].active").value(true))
+                .andExpect(jsonPath("$[1].icaoCode").value("LDDU"))
+                .andExpect(jsonPath("$[1].active").value(true));
+    }
+    
+    @Test
+    void testGetInactiveSubscriptions() throws Exception {
+        // Given
+        Subscription subscription1 = new Subscription("LDZA");
+        subscription1.setId(1L);
+        subscription1.setActive(false);
+        Subscription subscription2 = new Subscription("LDDU");
+        subscription2.setId(2L);
+        subscription2.setActive(false);
+        List<Subscription> subscriptions = Arrays.asList(subscription1, subscription2);
+        
+        when(subscriptionService.getSubscriptionsByActiveStatus(false)).thenReturn(subscriptions);
+
+        // When & Then
+        mockMvc.perform(get("/subscriptions")
+                .param("active", "false"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(2))
+                .andExpect(jsonPath("$[0].icaoCode").value("LDZA"))
+                .andExpect(jsonPath("$[0].active").value(false))
+                .andExpect(jsonPath("$[1].icaoCode").value("LDDU"))
+                .andExpect(jsonPath("$[1].active").value(false));
+    }
+    
+    @Test
+    void testGetSubscriptionsByIcaoCodePattern() throws Exception {
+        // Given
+        Subscription subscription1 = new Subscription("LDZA");
+        subscription1.setId(1L);
+        Subscription subscription2 = new Subscription("LDDU");
+        subscription2.setId(2L);
+        List<Subscription> subscriptions = Arrays.asList(subscription1, subscription2);
+        
+        when(subscriptionService.getSubscriptionsByIcaoCodePattern("%LD%")).thenReturn(subscriptions);
+
+        // When & Then
+        mockMvc.perform(get("/subscriptions")
+                .param("icaoCode", "LD"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(2))
+                .andExpect(jsonPath("$[0].icaoCode").value("LDZA"))
+                .andExpect(jsonPath("$[1].icaoCode").value("LDDU"));
+    }
+    
+    @Test
+    void testGetActiveSubscriptionsByIcaoCodePattern() throws Exception {
+        // Given
+        Subscription subscription1 = new Subscription("LDZA");
+        subscription1.setId(1L);
+        subscription1.setActive(true);
+        Subscription subscription2 = new Subscription("LDDU");
+        subscription2.setId(2L);
+        subscription2.setActive(true);
+        List<Subscription> subscriptions = Arrays.asList(subscription1, subscription2);
+        
+        when(subscriptionService.getSubscriptionsByActiveStatusAndIcaoCodePattern(true, "%LD%")).thenReturn(subscriptions);
+
+        // When & Then
+        mockMvc.perform(get("/subscriptions")
+                .param("active", "true")
+                .param("icaoCode", "LD"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(2))
+                .andExpect(jsonPath("$[0].icaoCode").value("LDZA"))
+                .andExpect(jsonPath("$[0].active").value(true))
+                .andExpect(jsonPath("$[1].icaoCode").value("LDDU"))
+                .andExpect(jsonPath("$[1].active").value(true));
     }
 
     @Test

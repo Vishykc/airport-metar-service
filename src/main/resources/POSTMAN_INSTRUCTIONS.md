@@ -64,6 +64,15 @@ The collection includes the following request folders:
    - Retrieves the latest METAR data for an airport
    - Replace `{icaoCode}` with the actual ICAO code
 
+3. **Get Latest METAR Data with Selected Fields** - GET `/airport/{icaoCode}/METAR?fields=windSpeed,temperature`
+   - Retrieves the latest METAR data with only specified fields
+   - Replace `{icaoCode}` with the actual ICAO code
+   - Modify the `fields` parameter to include desired fields
+
+4. **Get Latest METAR Data Decoded** - GET `/airport/{icaoCode}/METAR?decoded=true`
+   - Retrieves the latest METAR data in natural language format
+   - Replace `{icaoCode}` with the actual ICAO code
+
 ## Testing Workflow
 
 To test the complete workflow:
@@ -81,7 +90,9 @@ To test the complete workflow:
 
 5. Run the "Get Latest METAR Data" request to retrieve the stored METAR data
 
-6. Run the "Unsubscribe from Airport" request to remove the subscription
+6. Run the "Get Latest METAR Data Decoded" request to retrieve the stored METAR data in natural language format
+
+7. Run the "Unsubscribe from Airport" request to remove the subscription
 
 ## Example ICAO Codes
 

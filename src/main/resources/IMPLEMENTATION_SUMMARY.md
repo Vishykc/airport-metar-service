@@ -33,6 +33,8 @@ All required METAR data endpoints have been implemented:
 - **GET /airport/{icaoCode}/METAR** - Retrieve the latest METAR data for an airport
   - Returns HTTP 200 (OK) with the latest METAR data
   - Returns HTTP 404 (Not Found) if no data exists
+  - Supports optional `fields` parameter to retrieve only a subset of data
+  - Supports optional `decoded=true` parameter to retrieve data in natural language format
 
 ## 2. Automated Task
 
@@ -58,7 +60,7 @@ The database contains the required tables:
 
 ### 3.2 METAR Table
 - Stores METAR data for airports
-- Columns: id (auto-generated), icao_code, raw_data
+- Columns: id (auto-generated), icao_code, raw_data, observation_time, wind_direction, wind_speed, visibility, weather_conditions, temperature, dew_point, altimeter
 
 ## 4. Technology Stack
 
@@ -69,13 +71,13 @@ The database contains the required tables:
 
 ## 5. Extra Tasks Status
 
-The following extra tasks have been identified but not implemented as per requirements:
+The following extra tasks have been implemented:
 
-- [ ] Extend subscription endpoint to support activation/deactivation with PUT method
-- [ ] Provide filtering capabilities when returning airport subscriptions
-- [ ] Parse and split METAR data, storing elements in separate fields
-- [ ] Extend METAR retrieval endpoint to allow retrieving only a subset of data
-- [ ] Decode METAR data into natural language
+- [x] Extend subscription endpoint to support activation/deactivation with PUT method
+- [x] Provide filtering capabilities when returning airport subscriptions
+- [x] Parse and split METAR data, storing elements in separate fields
+- [x] Extend METAR retrieval endpoint to allow retrieving only a subset of data
+- [x] Decode METAR data into natural language
 
 ## 6. Files Created
 
@@ -98,5 +100,7 @@ The service can be tested manually by:
 6. Activating a subscription using the PUT endpoint:
    - Example: `PUT /subscriptions/LDZA` with JSON payload `{"active": "1"}` activates the Zagreb airport subscription
 7. Alternatively, you can use the provided test script `TEST_PUT_ENDPOINT.sh` which demonstrates all the PUT endpoint functionality
+8. To retrieve decoded METAR data in natural language format:
+   - Example: `GET /airport/LDZA/METAR?decoded=true` returns the METAR data in human-readable format
 
 All required components have been implemented according to the assignment specifications.

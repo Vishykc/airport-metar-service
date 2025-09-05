@@ -79,6 +79,12 @@ curl -X POST -H "Content-Type: application/json" -d '{"data": "METAR LDZA 030700
 
 # Retrieve latest METAR data for an airport
 curl http://localhost:8080/airport/LDZA/METAR
+
+# Retrieve latest METAR data with selected fields
+curl "http://localhost:8080/airport/LDZA/METAR?fields=windSpeed,temperature"
+
+# Retrieve latest METAR data in decoded natural language format
+curl "http://localhost:8080/airport/LDZA/METAR?decoded=true"
 ```
 
 ## 5. Automated Testing with Postman
@@ -110,7 +116,10 @@ chmod +x src/main/resources/fetch_metar_data.sh
 # 5. Retrieve the stored METAR data
 curl http://localhost:8080/airport/LDZA/METAR
 
-# 6. Unsubscribe from the airport
+# 6. Retrieve the stored METAR data in decoded format
+curl "http://localhost:8080/airport/LDZA/METAR?decoded=true"
+
+# 7. Unsubscribe from the airport
 curl -X DELETE http://localhost:8080/subscriptions/LDZA
 ```
 
@@ -212,6 +221,7 @@ To perform complete integration testing:
    curl http://localhost:8080/airport/LDZA/METAR
    curl http://localhost:8080/airport/LDDU/METAR
    curl http://localhost:8080/airport/EHAM/METAR
+   curl "http://localhost:8080/airport/LDZA/METAR?decoded=true"
    ```
 5. Check all subscriptions:
    ```bash

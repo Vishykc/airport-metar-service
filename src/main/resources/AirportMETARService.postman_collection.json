@@ -254,6 +254,58 @@
 						"description": "Get the latest METAR data for an airport"
 					},
 					"response": []
+				},
+				{
+					"name": "Get Latest METAR Data with Selected Fields",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/airport/LDZA/METAR?fields=windSpeed,temperature",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"airport",
+								"LDZA",
+								"METAR"
+							],
+							"query": [
+								{
+									"key": "fields",
+									"value": "windSpeed,temperature"
+								}
+							]
+						},
+						"description": "Get the latest METAR data for an airport with only wind speed and temperature fields"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Latest METAR Data with All Fields",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/airport/LDZA/METAR?fields=id,icaoCode,rawData,observationTime,windDirection,windSpeed,visibility,weatherConditions,temperature,dewPoint,altimeter",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"airport",
+								"LDZA",
+								"METAR"
+							],
+							"query": [
+								{
+									"key": "fields",
+									"value": "id,icaoCode,rawData,observationTime,windDirection,windSpeed,visibility,weatherConditions,temperature,dewPoint,altimeter"
+								}
+							]
+						},
+						"description": "Get the latest METAR data for an airport with all fields specified"
+					},
+					"response": []
 				}
 			]
 		}

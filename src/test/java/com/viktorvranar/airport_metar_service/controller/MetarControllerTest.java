@@ -110,6 +110,84 @@ class MetarControllerTest {
                 .andExpect(jsonPath("$.dewPoint").value("10"))
                 .andExpect(jsonPath("$.altimeter").value("Q1013"));
     }
+    
+    @Test
+    void testGetLatestMetarDataWithFields() throws Exception {
+        // Given
+        String icaoCode = "LDZA";
+        String rawData = "METAR LDZA 030700Z 00000KT 9999 NSW SCT040 15/10 Q1013 NOSIG";
+        
+        MetarData metarData = new MetarData();
+        metarData.setId(1L);
+        metarData.setIcaoCode(icaoCode);
+        metarData.setRawData(rawData);
+        // Set expected parsed values
+        metarData.setObservationTime("030700Z");
+        metarData.setWindDirection("000");
+        metarData.setWindSpeed("00");
+        metarData.setVisibility("9999");
+        metarData.setWeatherConditions("NSW SCT040");
+        metarData.setTemperature("15");
+        metarData.setDewPoint("10");
+        metarData.setAltimeter("Q1013");
+        
+        when(metarService.getLatestMetarData(icaoCode)).thenReturn(metarData);
+
+        // When & Then
+        mockMvc.perform(get("/airport/{icaoCode}/METAR", icaoCode)
+                .param("fields", "windSpeed,temperature"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").doesNotExist())
+                .andExpect(jsonPath("$.icaoCode").doesNotExist())
+                .andExpect(jsonPath("$.rawData").doesNotExist())
+                .andExpect(jsonPath("$.observationTime").doesNotExist())
+                .andExpect(jsonPath("$.windDirection").doesNotExist())
+                .andExpect(jsonPath("$.windSpeed").value("00"))
+                .andExpect(jsonPath("$.visibility").doesNotExist())
+                .andExpect(jsonPath("$.weatherConditions").doesNotExist())
+                .andExpect(jsonPath("$.temperature").value("15"))
+                .andExpect(jsonPath("$.dewPoint").doesNotExist())
+                .andExpect(jsonPath("$.altimeter").doesNotExist());
+    }
+    
+    @Test
+    void testGetLatestMetarDataWithAllFields() throws Exception {
+        // Given
+        String icaoCode = "LDZA";
+        String rawData = "METAR LDZA 030700Z 00000KT 9999 NSW SCT040 15/10 Q1013 NOSIG";
+        
+        MetarData metarData = new MetarData();
+        metarData.setId(1L);
+        metarData.setIcaoCode(icaoCode);
+        metarData.setRawData(rawData);
+        // Set expected parsed values
+        metarData.setObservationTime("030700Z");
+        metarData.setWindDirection("000");
+        metarData.setWindSpeed("00");
+        metarData.setVisibility("9999");
+        metarData.setWeatherConditions("NSW SCT040");
+        metarData.setTemperature("15");
+        metarData.setDewPoint("10");
+        metarData.setAltimeter("Q1013");
+        
+        when(metarService.getLatestMetarData(icaoCode)).thenReturn(metarData);
+
+        // When & Then
+        mockMvc.perform(get("/airport/{icaoCode}/METAR", icaoCode)
+                .param("fields", "id,icaoCode,rawData,observationTime,windDirection,windSpeed,visibility,weatherConditions,temperature,dewPoint,altimeter"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(1L))
+                .andExpect(jsonPath("$.icaoCode").value(icaoCode))
+                .andExpect(jsonPath("$.rawData").value(rawData))
+                .andExpect(jsonPath("$.observationTime").value("030700Z"))
+                .andExpect(jsonPath("$.windDirection").value("000"))
+                .andExpect(jsonPath("$.windSpeed").value("00"))
+                .andExpect(jsonPath("$.visibility").value("9999"))
+                .andExpect(jsonPath("$.weatherConditions").value("NSW SCT040"))
+                .andExpect(jsonPath("$.temperature").value("15"))
+                .andExpect(jsonPath("$.dewPoint").value("10"))
+                .andExpect(jsonPath("$.altimeter").value("Q1013"));
+    }
 
     @Test
     void testGetLatestMetarDataNotFound() throws Exception {
